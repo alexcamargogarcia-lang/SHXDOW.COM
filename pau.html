@@ -24,7 +24,7 @@ h1 {
   color:#00f0ff;
   margin-bottom:20px;
   text-align:center;
-  text-shadow: 0 0 10px #00f0ff;
+  text-shadow: 0 0 15px #00f0ff, 0 0 30px #ff0066;
 }
 
 .buttons {
@@ -41,7 +41,7 @@ button {
   font-weight:bold;
   cursor:pointer;
   transition:.3s;
-  box-shadow: 0 0 10px #00f0ff;
+  box-shadow: 0 0 10px #00f0ff, 0 0 20px #ff0066;
 }
 
 #yesBtn {
@@ -62,37 +62,16 @@ button {
   pointer-events:none;
 }
 
-.heart {
-  position:absolute;
-  width:50px;
-  height:50px;
-  color:#ff0066;
-  font-size:50px;
-  animation:floatHeart 4s ease-in-out infinite;
-}
-
-.flower {
+.heart, .flower, .cat {
   position:absolute;
   font-size:30px;
   animation:float 5s ease-in-out infinite;
 }
 
-.cat {
-  position:absolute;
-  font-size:30px;
-  animation:float 4s ease-in-out infinite;
-}
-
 @keyframes float {
   0% { transform: translateY(0px) rotate(0deg); opacity:1;}
-  50% { transform: translateY(-50px) rotate(20deg); opacity:0.8;}
+  50% { transform: translateY(-80px) rotate(15deg); opacity:0.8;}
   100% { transform: translateY(0px) rotate(0deg); opacity:1;}
-}
-
-@keyframes floatHeart {
-  0% { transform: translateY(0px) scale(1); opacity:1;}
-  50% { transform: translateY(-80px) scale(1.2); opacity:0.8;}
-  100% { transform: translateY(0px) scale(1); opacity:1;}
 }
 </style>
 </head>
@@ -109,7 +88,7 @@ button {
 
 <!-- Música de fondo -->
 <audio id="music" autoplay loop>
-  <source src="https://cdn.jsdelivr.net/gh/alexcamargogarcia-lang/SHXDOW.COM/sabanas_blancas.mp3" type="audio/mpeg">
+  <source src="https://alexcamargogarcia-lang.github.io/SHXDOW.COM/sabanas_blancas.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -118,55 +97,53 @@ const noBtn = document.getElementById('noBtn');
 const decor = document.getElementById('decor');
 const music = document.getElementById('music');
 
+// Forzar que la música se reproduzca y haga loop infinito
+music.volume = 0.5;
+music.loop = true;
+music.play().catch(()=>console.log("Autoplay bloqueado, comenzará al interactuar"));
+
+// Función para crear elementos flotantes
 function createFloatingItem(type){
   const el = document.createElement('div');
   el.className = type;
   if(type==='heart'){
     el.innerText='❤️';
-    el.style.left = Math.random()*window.innerWidth + 'px';
-    el.style.top = window.innerHeight + 'px';
-    el.style.fontSize = (30+Math.random()*40)+'px';
-    el.style.animationDuration = (3+Math.random()*3)+'s';
   } else if(type==='flower'){
     el.innerText='🌸';
-    el.style.left = Math.random()*window.innerWidth + 'px';
-    el.style.top = window.innerHeight + 'px';
-    el.style.fontSize = (20+Math.random()*20)+'px';
-    el.style.animationDuration = (4+Math.random()*3)+'s';
   } else if(type==='cat'){
     el.innerText='🐱';
-    el.style.left = Math.random()*window.innerWidth + 'px';
-    el.style.top = window.innerHeight + 'px';
-    el.style.fontSize = (20+Math.random()*20)+'px';
-    el.style.animationDuration = (4+Math.random()*3)+'s';
   }
+  el.style.left = Math.random()*window.innerWidth + 'px';
+  el.style.top = window.innerHeight + 'px';
+  el.style.fontSize = (20+Math.random()*30)+'px';
+  el.style.animationDuration = (4+Math.random()*4)+'s';
   decor.appendChild(el);
-  setTimeout(()=> decor.removeChild(el),5000); // elimina para no saturar
+  // Eliminar después de animación para no saturar
+  setTimeout(()=> decor.removeChild(el),8000);
 }
+
+// Animación continua de fondo
+setInterval(()=>{
+  const types = ['heart','flower','cat'];
+  createFloatingItem(types[Math.floor(Math.random()*types.length)]);
+},500);
 
 // Sí
 yesBtn.onclick = () => {
-  document.body.innerHTML = '<h1>Gracias por aceptar 💖</h1>';
-  music.play();
+  document.querySelector('h1').innerText = "Gracias por aceptar 💖";
+  document.querySelector('.buttons').style.display = "none";
 }
 
 // No
 noBtn.onclick = () => {
+  // Botón travieso
   noBtn.style.transform = 'scale('+(1+Math.random()*0.5)+')';
-  // Crear varios corazones, flores y gatos
-  for(let i=0;i<5;i++){
-    createFloatingItem('heart');
-    createFloatingItem('flower');
-    createFloatingItem('cat');
+  // Generar algunos elementos flotantes
+  for(let i=0;i<6;i++){
+    const types = ['heart','flower','cat'];
+    createFloatingItem(types[Math.floor(Math.random()*types.length)]);
   }
-  music.play();
 }
-
-// Crear animación continua de fondo
-setInterval(()=>{
-  const types = ['heart','flower','cat'];
-  createFloatingItem(types[Math.floor(Math.random()*types.length)]);
-},800);
 </script>
 
 </body>

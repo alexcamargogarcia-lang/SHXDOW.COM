@@ -6,33 +6,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+/* FONDO DINÁMICO NEÓN */
 body {
   margin:0;
-  background:#111;
+  height:100vh;
   font-family:'Inter',sans-serif;
   overflow:hidden;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  height:100vh;
+  background: linear-gradient(45deg, #111, #000, #111);
+  background-size: 400% 400%;
+  animation: bgAnimation 20s linear infinite;
   color:#fff;
 }
+@keyframes bgAnimation {
+  0% {background-position:0 0;}
+  50% {background-position:100% 100%;}
+  100% {background-position:0 0;}
+}
 
+/* TITULO */
 h1 {
   font-size:2.5em;
   color:#00f0ff;
-  margin-bottom:20px;
+  text-shadow:0 0 10px #00f0ff, 0 0 20px #ff0066;
   text-align:center;
-  text-shadow: 0 0 15px #00f0ff, 0 0 30px #ff0066;
+  margin-bottom:20px;
 }
 
+/* BOTONES */
 .buttons {
   display:flex;
   gap:20px;
   margin-top:20px;
 }
-
 button {
   padding:15px 25px;
   border:none;
@@ -43,35 +52,39 @@ button {
   transition:.3s;
   box-shadow: 0 0 10px #00f0ff, 0 0 20px #ff0066;
 }
+#yesBtn { background:#00f0ff; color:#000; }
+#noBtn { background:#ff0066; color:#fff; }
 
-#yesBtn {
-  background:#00f0ff;
-  color:#000;
-}
-#noBtn {
-  background:#ff0066;
-  color:#fff;
-}
-
+/* DECORACIONES */
 #decor {
   position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  top:0; left:0;
+  width:100%; height:100%;
   pointer-events:none;
+  overflow:hidden;
 }
 
-.heart, .flower, .cat {
+/* ANIMACIONES */
+.floating {
   position:absolute;
   font-size:30px;
-  animation:float 5s ease-in-out infinite;
+  animation:float 6s ease-in-out infinite;
+  opacity:0.9;
+}
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg);}
+  50% { transform: translateY(-120px) rotate(20deg);}
+  100% { transform: translateY(0px) rotate(0deg);}
 }
 
-@keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); opacity:1;}
-  50% { transform: translateY(-80px) rotate(15deg); opacity:0.8;}
-  100% { transform: translateY(0px) rotate(0deg); opacity:1;}
+/* CORAZONES LATIENDO */
+.heart-beat {
+  animation:beat 1s infinite alternate;
+}
+@keyframes beat {
+  0% {transform:scale(1);}
+  50% {transform:scale(1.3);}
+  100% {transform:scale(1);}
 }
 </style>
 </head>
@@ -86,8 +99,8 @@ button {
 
 <div id="decor"></div>
 
-<!-- Música de fondo -->
-<audio id="music" autoplay loop>
+<!-- MÚSICA DE FONDO -->
+<audio id="music" loop>
   <source src="https://alexcamargogarcia-lang.github.io/SHXDOW.COM/sabanas_blancas.mp3" type="audio/mpeg">
 </audio>
 
@@ -97,51 +110,48 @@ const noBtn = document.getElementById('noBtn');
 const decor = document.getElementById('decor');
 const music = document.getElementById('music');
 
-// Forzar que la música se reproduzca y haga loop infinito
+// Música infinita: reproducir al primer clic o intento automático
 music.volume = 0.5;
 music.loop = true;
-music.play().catch(()=>console.log("Autoplay bloqueado, comenzará al interactuar"));
+music.play().catch(()=>console.log("Autoplay bloqueado, comenzará al primer clic"));
+document.addEventListener('click',()=>{music.play();},{once:true});
 
-// Función para crear elementos flotantes
-function createFloatingItem(type){
+// Crear partículas flotantes
+function createParticle(type){
   const el = document.createElement('div');
-  el.className = type;
-  if(type==='heart'){
-    el.innerText='❤️';
-  } else if(type==='flower'){
-    el.innerText='🌸';
-  } else if(type==='cat'){
-    el.innerText='🐱';
-  }
+  el.className = 'floating';
+  if(type==='heart'){ el.innerText='❤️'; el.classList.add('heart-beat'); }
+  if(type==='flower'){ el.innerText='🌸'; }
+  if(type==='cat'){ el.innerText='🐱'; }
+
   el.style.left = Math.random()*window.innerWidth + 'px';
   el.style.top = window.innerHeight + 'px';
-  el.style.fontSize = (20+Math.random()*30)+'px';
-  el.style.animationDuration = (4+Math.random()*4)+'s';
+  el.style.fontSize = (20+Math.random()*40)+'px';
+  el.style.animationDuration = (3+Math.random()*4)+'s';
+
   decor.appendChild(el);
-  // Eliminar después de animación para no saturar
-  setTimeout(()=> decor.removeChild(el),8000);
+  setTimeout(()=> decor.removeChild(el),10000);
 }
 
 // Animación continua de fondo
 setInterval(()=>{
   const types = ['heart','flower','cat'];
-  createFloatingItem(types[Math.floor(Math.random()*types.length)]);
-},500);
+  createParticle(types[Math.floor(Math.random()*types.length)]);
+},300);
 
-// Sí
+// Botón Sí
 yesBtn.onclick = () => {
   document.querySelector('h1').innerText = "Gracias por aceptar 💖";
   document.querySelector('.buttons').style.display = "none";
+  // la música sigue
 }
 
-// No
+// Botón No
 noBtn.onclick = () => {
-  // Botón travieso
   noBtn.style.transform = 'scale('+(1+Math.random()*0.5)+')';
-  // Generar algunos elementos flotantes
-  for(let i=0;i<6;i++){
+  for(let i=0;i<10;i++){
     const types = ['heart','flower','cat'];
-    createFloatingItem(types[Math.floor(Math.random()*types.length)]);
+    createParticle(types[Math.floor(Math.random()*types.length)]);
   }
 }
 </script>

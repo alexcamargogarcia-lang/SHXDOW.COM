@@ -7,193 +7,161 @@
 
 <style>
 :root{
- --bg:#050508;
- --card:rgba(255,255,255,.05);
- --border:rgba(255,255,255,.14);
- --neon:#fff;
- --muted:rgba(255,255,255,.65);
+  --bg:#050508;
+  --card:rgba(255,255,255,.05);
+  --border:rgba(255,255,255,.15);
+  --muted:rgba(255,255,255,.65);
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
 
 body{
- min-height:100vh;
- background:radial-gradient(circle at top,#111,transparent 40%),var(--bg);
- display:flex;
- align-items:center;
- justify-content:center;
- color:white;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#111,transparent 40%),var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
 }
 
-.container{
- width:440px;
- max-width:92%;
- background:var(--card);
- border-radius:26px;
- padding:42px 36px;
- backdrop-filter:blur(18px);
- border:1px solid var(--border);
- box-shadow:0 0 55px rgba(255,255,255,.08);
- animation:fade .9s ease;
+.card{
+  width:440px;
+  max-width:92%;
+  background:var(--card);
+  padding:40px;
+  border-radius:26px;
+  border:1px solid var(--border);
+  box-shadow:0 0 60px rgba(255,255,255,.08);
+  animation:fade .8s ease;
 }
 
 @keyframes fade{
- from{opacity:0;transform:translateY(20px)}
- to{opacity:1}
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1}
 }
 
-.logo{
- width:90px;height:90px;margin:0 auto 22px;
- border-radius:50%;
- border:2px solid var(--border);
- display:flex;align-items:center;justify-content:center;
- font-size:36px;font-weight:900;
- box-shadow:0 0 30px rgba(255,255,255,.5);
-}
-
-h1{text-align:center;letter-spacing:4px;margin-bottom:6px}
+h1{text-align:center;letter-spacing:4px}
 .sub{text-align:center;color:var(--muted);margin-bottom:25px}
 
-input,select{
- width:100%;
- padding:14px 16px;
- background:#000;
- border:1px solid var(--border);
- border-radius:14px;
- color:white;
- margin-bottom:14px;
- outline:none;
+input,select,button{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:black;
+  color:white;
+  outline:none;
 }
 
 button{
- width:100%;
- padding:14px;
- border:none;
- border-radius:40px;
- background:white;
- color:black;
- font-weight:700;
- cursor:pointer;
- transition:.3s;
+  background:white;
+  color:black;
+  font-weight:700;
+  cursor:pointer;
+  transition:.3s;
 }
 
 button:hover{
- transform:translateY(-4px);
- box-shadow:0 14px 40px rgba(255,255,255,.7)
+  transform:translateY(-3px);
+  box-shadow:0 14px 40px rgba(255,255,255,.6);
 }
 
-.admin-btn{
- margin-top:12px;
- background:transparent;
- color:white;
- border:1px dashed var(--border);
+.small{
+  text-align:center;
+  font-size:.85rem;
+  opacity:.6;
+  margin-top:8px;
 }
-
-.status{text-align:center;margin-top:10px;color:var(--muted)}
-
-.admin{
- margin-top:18px;
- border-top:1px solid var(--border);
- padding-top:16px;
- animation:fade .6s ease;
-}
-
-.hidden{display:none}
-
-.history{
- margin-top:12px;
- max-height:120px;
- overflow:auto;
- font-size:.85rem;
-}
-
-.history div{
- padding:6px 0;
- border-bottom:1px solid rgba(255,255,255,.08);
-}
+hr{border:none;height:1px;background:rgba(255,255,255,.15);margin:22px 0}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="card">
+  <h1>SHXDOW</h1>
+  <div class="sub">Blox Fruits Server Join</div>
 
- <div class="logo">S</div>
- <h1>SHXDOW</h1>
- <div class="sub">Blox Fruits Server Join</div>
+  <!-- PUBLIC -->
+  <select id="sea">
+    <option value="1">SEA 1</option>
+    <option value="2">SEA 2</option>
+    <option value="3">SEA 3</option>
+  </select>
 
- <!-- PUBLIC -->
- <select id="sea">
-  <option value="1">SEA 1</option>
-  <option value="2">SEA 2</option>
-  <option value="3">SEA 3</option>
- </select>
+  <input id="job" placeholder="Paste JOBID">
+  <button onclick="join()">JOIN SERVER</button>
 
- <input id="job" placeholder="Paste JOBID">
- <button onclick="join()">JOIN SERVER</button>
- <div class="status" id="status"></div>
+  <hr>
 
- <!-- ADMIN BUTTON -->
- <button class="admin-btn" onclick="admin()">Admin Mode</button>
+  <!-- ADMIN LOGIN -->
+  <input id="email" placeholder="Admin email">
+  <input id="password" type="password" placeholder="Admin password">
+  <button onclick="unlock()">UNLOCK</button>
 
- <!-- ADMIN PANEL -->
- <div id="adminPanel" class="admin hidden">
-   <input id="email" placeholder="Admin email">
-   <button onclick="unlock()">UNLOCK</button>
-   <div class="history" id="history"></div>
- </div>
-
+  <div class="small" id="status"></div>
 </div>
 
 <script>
-const ADMIN_EMAIL="alexcamargogarcia@gmail.com";
-const SEA_PLACE={
- 1:2753915549,
- 2:4442272183,
- 3:7449423635
+/* ===== CONFIG ===== */
+const ADMIN_EMAIL = "alexcamargogarcia@gmail.com";
+const ADMIN_PASS  = "190488";
+
+const SEA_PLACE = {
+  1:2753915549,
+  2:4442272183,
+  3:7449423635
 };
 
-if(localStorage.getItem("shxdow_admin")==="1"){
- document.getElementById("adminPanel").classList.remove("hidden");
- render();
-}
-
+/* ===== JOIN ===== */
 function join(){
- const job=document.getElementById("job").value.trim();
- if(!job)return;
- const sea=document.getElementById("sea").value;
- const place=SEA_PLACE[sea];
- document.getElementById("status").innerText="Opening Roblox...";
+  const job=document.getElementById("job").value.trim();
+  if(!job)return;
 
- save(job,sea);
+  const sea=document.getElementById("sea").value;
+  const place=SEA_PLACE[sea];
 
- location.href=`roblox://experiences/start?placeId=${place}&gameInstanceId=${job}`;
- setTimeout(()=>{
-  location.href=`https://www.roblox.com/games/${place}?placeInstanceId=${job}`;
- },2000);
+  saveJob(job,sea);
+
+  location.href=`roblox://experiences/start?placeId=${place}&gameInstanceId=${job}`;
+  setTimeout(()=>{
+    location.href=`https://www.roblox.com/games/${place}?placeInstanceId=${job}`;
+  },2000);
 }
 
-function admin(){
- document.getElementById("adminPanel").classList.toggle("hidden");
-}
-
+/* ===== ADMIN LOGIN ===== */
 function unlock(){
- const e=document.getElementById("email").value.trim();
- if(e!==ADMIN_EMAIL)return alert("Access denied");
- localStorage.setItem("shxdow_admin","1");
- render();
+  const email=document.getElementById("email").value.trim();
+  const pass=document.getElementById("password").value.trim();
+
+  if(email===ADMIN_EMAIL && pass===ADMIN_PASS){
+    localStorage.setItem("shxdow_admin","1");
+    location.href="admin.html";
+  }else{
+    saveDenied(email);
+    document.getElementById("status").innerText="Access denied";
+  }
 }
 
-function save(job,sea){
- let h=JSON.parse(localStorage.getItem("shxdow_history")||"[]");
- h.unshift(`SEA ${sea} • ${job}`);
- localStorage.setItem("shxdow_history",JSON.stringify(h.slice(0,10)));
+/* ===== STORAGE ===== */
+function saveJob(job,sea){
+  let h=JSON.parse(localStorage.getItem("jobs")||"[]");
+  h.unshift({
+    job,
+    sea,
+    time:new Date().toLocaleString()
+  });
+  localStorage.setItem("jobs",JSON.stringify(h.slice(0,30)));
 }
 
-function render(){
- let h=JSON.parse(localStorage.getItem("shxdow_history")||"[]");
- document.getElementById("history").innerHTML=
-  h.map(x=>`<div>${x}</div>`).join("");
+function saveDenied(email){
+  let d=JSON.parse(localStorage.getItem("denied")||"[]");
+  d.unshift({
+    email: email || "(empty)",
+    time:new Date().toLocaleString()
+  });
+  localStorage.setItem("denied",JSON.stringify(d.slice(0,30)));
 }
 </script>
 

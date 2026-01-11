@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pau ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  background:#111;
+  color:#fff;
+  font-family:'Inter',sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  overflow:hidden;
+  flex-direction:column;
+}
+h1{
+  color:#00f0ff;
+  font-size:2.5em;
+  margin-bottom:20px;
+  text-align:center;
+}
+.buttons{
+  display:flex;
+  gap:20px;
+  margin-top:20px;
+}
+button{
+  padding:15px 25px;
+  border:none;
+  border-radius:50px;
+  font-size:1.2em;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.3s;
+}
+button#yesBtn{
+  background:#00f0ff;
+  color:#000;
+}
+button#noBtn{
+  background:#ff0066;
+  color:#fff;
+}
+button#noBtn:hover{
+  transform:scale(1.2);
+}
+
+/* Corazón animado */
+.heart{
+  width:100px;
+  height:90px;
+  position:relative;
+  transform:rotate(-45deg);
+  margin-top:20px;
+  display:none;
+}
+.heart::before,
+.heart::after{
+  content:"";
+  width:100px;
+  height:90px;
+  background:#ff0066;
+  border-radius:50%;
+  position:absolute;
+}
+.heart::before{top:-50px; left:0;}
+.heart::after{left:50px; top:0;}
+.flower, .cat{
+  position:absolute;
+  width:50px;
+  height:50px;
+  animation:float 4s infinite;
+}
+@keyframes float{
+  0%{transform:translateY(0px);}
+  50%{transform:translateY(-30px);}
+  100%{transform:translateY(0);}
+}
+</style>
+</head>
+<body>
+
+<h1>¿Quieres ser mi novia? 💖</h1>
+<div class="buttons">
+  <button id="yesBtn">Sí</button>
+  <button id="noBtn">No</button>
+</div>
+
+<div class="heart" id="heart"></div>
+
+<div id="decor"></div>
+
+<!-- Música de fondo -->
+<audio id="music" autoplay loop>
+  <source src="https://cdn.jsdelivr.net/gh/alexcamargogarcia-lang/SHXDOW.COM/sabanas_blancas.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const heart = document.getElementById('heart');
+const decor = document.getElementById('decor');
+const music = document.getElementById('music');
+
+yesBtn.onclick = () => {
+  document.body.innerHTML = '<h1>Gracias por aceptar 💖</h1>';
+  music.play();
+}
+
+noBtn.onclick = () => {
+  noBtn.style.transform = 'scale(' + (Math.random()*1.5 + 1) + ')';
+  heart.style.display = 'block';
+  for(let i=0;i<5;i++){
+    const f = document.createElement('div');
+    f.className = i%2===0 ? 'flower' : 'cat';
+    f.innerText = i%2===0 ? '🌸' : '🐱';
+    f.style.left = Math.random()*window.innerWidth + 'px';
+    f.style.top = Math.random()*window.innerHeight + 'px';
+    decor.appendChild(f);
+  }
+  music.play();
+}
+</script>
+
+</body>
+</html>

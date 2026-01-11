@@ -120,6 +120,20 @@ hr{
   color:var(--muted);
 }
 .hidden{display:none;}
+
+/* Botón flotante Pau */
+#pauBtn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:var(--neo);
+  color:#000;
+  padding:10px 15px;
+  border-radius:50px;
+  font-weight:700;
+  cursor:pointer;
+  z-index:999;
+}
 </style>
 </head>
 <body>
@@ -167,6 +181,9 @@ hr{
 
 </div>
 
+<!-- Botón Pau -->
+<button id="pauBtn">Pau</button>
+
 <script>
 // CONFIG
 const PLACE_ID = 2753915549;
@@ -174,7 +191,7 @@ const ADMIN_EMAIL = "alexcamargogarcia@gmail.com";
 const ADMIN_PASS = "190488";
 const SCRIPTS_URL = 'https://alexcamargogarcia-lang.github.io/SHXDOW.COM/scripts.json';
 
-// DOM ELEMENTS
+// DOM
 const jobId = document.getElementById("jobId");
 const adminMail = document.getElementById("adminMail");
 const adminPass = document.getElementById("adminPass");
@@ -220,7 +237,7 @@ async function renderPublicScripts(){
   }
 }
 
-// Local storage para el admin
+// Admin local
 function loadLocal(){
   return JSON.parse(localStorage.getItem("shxdow_scripts_local")||"[]");
 }
@@ -273,6 +290,11 @@ function login(){
   } else {
     alert("Access denied");
   }
+}
+
+// Botón Pau
+document.getElementById('pauBtn').onclick = () => {
+  window.location.href = 'pau.html';
 }
 
 // Inicial

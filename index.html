@@ -9,11 +9,16 @@
 :root{
   --bg:#050508;
   --card:rgba(255,255,255,.05);
-  --border:rgba(255,255,255,.15);
+  --border:rgba(255,255,255,.18);
   --muted:rgba(255,255,255,.65);
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Segoe UI,system-ui,sans-serif;
+}
 
 body{
   min-height:100vh;
@@ -40,23 +45,41 @@ body{
   to{opacity:1}
 }
 
-h1{text-align:center;letter-spacing:4px}
-.sub{text-align:center;color:var(--muted);margin-bottom:25px}
+h1{
+  text-align:center;
+  letter-spacing:4px;
+}
 
-input,select,button{
+.sub{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:25px;
+}
+
+/* 🔐 INPUTS VISIBLES */
+input,select{
   width:100%;
   padding:14px;
   margin:10px 0;
   border-radius:14px;
   border:1px solid var(--border);
-  background:black;
-  color:white;
+  background:#000;
+  color:#fff;              /* ← CLAVE */
   outline:none;
 }
 
+input::placeholder{
+  color:rgba(255,255,255,.45);
+}
+
 button{
-  background:white;
-  color:black;
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:none;
+  border-radius:40px;
+  background:#fff;
+  color:#000;
   font-weight:700;
   cursor:pointer;
   transition:.3s;
@@ -73,7 +96,13 @@ button:hover{
   opacity:.6;
   margin-top:8px;
 }
-hr{border:none;height:1px;background:rgba(255,255,255,.15);margin:22px 0}
+
+hr{
+  border:none;
+  height:1px;
+  background:rgba(255,255,255,.15);
+  margin:22px 0;
+}
 </style>
 </head>
 
@@ -83,7 +112,7 @@ hr{border:none;height:1px;background:rgba(255,255,255,.15);margin:22px 0}
   <h1>SHXDOW</h1>
   <div class="sub">Blox Fruits Server Join</div>
 
-  <!-- PUBLIC -->
+  <!-- 🌍 PUBLIC -->
   <select id="sea">
     <option value="1">SEA 1</option>
     <option value="2">SEA 2</option>
@@ -91,13 +120,15 @@ hr{border:none;height:1px;background:rgba(255,255,255,.15);margin:22px 0}
   </select>
 
   <input id="job" placeholder="Paste JOBID">
+
   <button onclick="join()">JOIN SERVER</button>
 
   <hr>
 
-  <!-- ADMIN LOGIN -->
-  <input id="email" placeholder="Admin email">
+  <!-- 👑 ADMIN LOGIN -->
+  <input id="email" type="email" placeholder="Admin email">
   <input id="password" type="password" placeholder="Admin password">
+
   <button onclick="unlock()">UNLOCK</button>
 
   <div class="small" id="status"></div>
@@ -116,52 +147,52 @@ const SEA_PLACE = {
 
 /* ===== JOIN ===== */
 function join(){
-  const job=document.getElementById("job").value.trim();
-  if(!job)return;
+  const job = document.getElementById("job").value.trim();
+  if(!job) return;
 
-  const sea=document.getElementById("sea").value;
-  const place=SEA_PLACE[sea];
+  const sea = document.getElementById("sea").value;
+  const place = SEA_PLACE[sea];
 
-  saveJob(job,sea);
+  saveJob(job, sea);
 
-  location.href=`roblox://experiences/start?placeId=${place}&gameInstanceId=${job}`;
-  setTimeout(()=>{
-    location.href=`https://www.roblox.com/games/${place}?placeInstanceId=${job}`;
-  },2000);
+  location.href = `roblox://experiences/start?placeId=${place}&gameInstanceId=${job}`;
+  setTimeout(() => {
+    location.href = `https://www.roblox.com/games/${place}?placeInstanceId=${job}`;
+  }, 2000);
 }
 
-/* ===== ADMIN LOGIN ===== */
+/* ===== ADMIN UNLOCK ===== */
 function unlock(){
-  const email=document.getElementById("email").value.trim();
-  const pass=document.getElementById("password").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const pass  = document.getElementById("password").value.trim();
 
-  if(email===ADMIN_EMAIL && pass===ADMIN_PASS){
-    localStorage.setItem("shxdow_admin","1");
-    location.href="admin.html";
+  if(email === ADMIN_EMAIL && pass === ADMIN_PASS){
+    localStorage.setItem("shxdow_admin", "1");
+    location.href = "admin.html";
   }else{
     saveDenied(email);
-    document.getElementById("status").innerText="Access denied";
+    document.getElementById("status").innerText = "Access denied";
   }
 }
 
 /* ===== STORAGE ===== */
-function saveJob(job,sea){
-  let h=JSON.parse(localStorage.getItem("jobs")||"[]");
+function saveJob(job, sea){
+  let h = JSON.parse(localStorage.getItem("jobs") || "[]");
   h.unshift({
-    job,
-    sea,
-    time:new Date().toLocaleString()
+    job: job,
+    sea: sea,
+    time: new Date().toLocaleString()
   });
-  localStorage.setItem("jobs",JSON.stringify(h.slice(0,30)));
+  localStorage.setItem("jobs", JSON.stringify(h.slice(0,30)));
 }
 
 function saveDenied(email){
-  let d=JSON.parse(localStorage.getItem("denied")||"[]");
+  let d = JSON.parse(localStorage.getItem("denied") || "[]");
   d.unshift({
     email: email || "(empty)",
-    time:new Date().toLocaleString()
+    time: new Date().toLocaleString()
   });
-  localStorage.setItem("denied",JSON.stringify(d.slice(0,30)));
+  localStorage.setItem("denied", JSON.stringify(d.slice(0,30)));
 }
 </script>
 

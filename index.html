@@ -2,101 +2,114 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>SHXDOW • Secure Join</title>
+<title>SHXDOW</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root {
-  --bg:#050507;
-  --card:rgba(255,255,255,0.05);
-  --border:rgba(255,255,255,0.15);
-  --neon:#ffffff;
-  --muted:rgba(255,255,255,0.65);
+:root{
+ --bg:#050508;
+ --card:rgba(255,255,255,.05);
+ --border:rgba(255,255,255,.14);
+ --neon:#fff;
+ --muted:rgba(255,255,255,.65);
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,system-ui}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI}
 
 body{
-  min-height:100vh;
-  background:radial-gradient(circle at top,#111,transparent 45%),var(--bg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
+ min-height:100vh;
+ background:radial-gradient(circle at top,#111,transparent 40%),var(--bg);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:white;
 }
 
 .container{
-  width:440px;
-  max-width:92%;
-  background:var(--card);
-  backdrop-filter:blur(20px);
-  border-radius:24px;
-  padding:40px 35px;
-  border:1px solid var(--border);
-  box-shadow:0 0 60px rgba(255,255,255,0.06);
-  animation:pop 1s ease;
+ width:440px;
+ max-width:92%;
+ background:var(--card);
+ border-radius:26px;
+ padding:42px 36px;
+ backdrop-filter:blur(18px);
+ border:1px solid var(--border);
+ box-shadow:0 0 55px rgba(255,255,255,.08);
+ animation:fade .9s ease;
 }
 
-@keyframes pop{
-  from{opacity:0;transform:translateY(25px) scale(.95)}
-  to{opacity:1}
+@keyframes fade{
+ from{opacity:0;transform:translateY(20px)}
+ to{opacity:1}
 }
 
 .logo{
-  width:90px;height:90px;margin:0 auto 20px;
-  border-radius:50%;
-  border:2px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:36px;font-weight:900;
-  box-shadow:0 0 30px rgba(255,255,255,.4)
+ width:90px;height:90px;margin:0 auto 22px;
+ border-radius:50%;
+ border:2px solid var(--border);
+ display:flex;align-items:center;justify-content:center;
+ font-size:36px;font-weight:900;
+ box-shadow:0 0 30px rgba(255,255,255,.5);
 }
 
 h1{text-align:center;letter-spacing:4px;margin-bottom:6px}
 .sub{text-align:center;color:var(--muted);margin-bottom:25px}
 
 input,select{
-  width:100%;
-  padding:14px 16px;
-  background:#000;
-  border:1px solid var(--border);
-  border-radius:14px;
-  color:white;
-  margin-bottom:14px;
-  outline:none;
+ width:100%;
+ padding:14px 16px;
+ background:#000;
+ border:1px solid var(--border);
+ border-radius:14px;
+ color:white;
+ margin-bottom:14px;
+ outline:none;
 }
 
 button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:40px;
-  background:white;
-  color:black;
-  font-weight:700;
-  font-size:1.1rem;
-  cursor:pointer;
-  transition:.3s;
+ width:100%;
+ padding:14px;
+ border:none;
+ border-radius:40px;
+ background:white;
+ color:black;
+ font-weight:700;
+ cursor:pointer;
+ transition:.3s;
 }
 
 button:hover{
-  transform:translateY(-4px);
-  box-shadow:0 15px 40px rgba(255,255,255,.7)
+ transform:translateY(-4px);
+ box-shadow:0 14px 40px rgba(255,255,255,.7)
+}
+
+.admin-btn{
+ margin-top:12px;
+ background:transparent;
+ color:white;
+ border:1px dashed var(--border);
+}
+
+.status{text-align:center;margin-top:10px;color:var(--muted)}
+
+.admin{
+ margin-top:18px;
+ border-top:1px solid var(--border);
+ padding-top:16px;
+ animation:fade .6s ease;
 }
 
 .hidden{display:none}
 
-.status{text-align:center;margin-top:12px;color:var(--muted)}
-
 .history{
-  margin-top:20px;
-  max-height:120px;
-  overflow:auto;
-  font-size:.85rem;
+ margin-top:12px;
+ max-height:120px;
+ overflow:auto;
+ font-size:.85rem;
 }
 
 .history div{
-  padding:6px 0;
-  border-bottom:1px solid rgba(255,255,255,.08);
+ padding:6px 0;
+ border-bottom:1px solid rgba(255,255,255,.08);
 }
 </style>
 </head>
@@ -105,93 +118,83 @@ button:hover{
 
 <div class="container">
 
-  <div class="logo">S</div>
-  <h1>SHXDOW</h1>
-  <div class="sub">Secure Blox Fruits Join</div>
+ <div class="logo">S</div>
+ <h1>SHXDOW</h1>
+ <div class="sub">Blox Fruits Server Join</div>
 
-  <!-- LOGIN -->
-  <div id="login">
-    <input id="email" placeholder="Enter email to unlock">
-    <button onclick="login()">UNLOCK</button>
-    <div class="status" id="loginStatus"></div>
-  </div>
+ <!-- PUBLIC -->
+ <select id="sea">
+  <option value="1">SEA 1</option>
+  <option value="2">SEA 2</option>
+  <option value="3">SEA 3</option>
+ </select>
 
-  <!-- PANEL -->
-  <div id="panel" class="hidden">
+ <input id="job" placeholder="Paste JOBID">
+ <button onclick="join()">JOIN SERVER</button>
+ <div class="status" id="status"></div>
 
-    <select id="sea">
-      <option value="1">SEA 1</option>
-      <option value="2">SEA 2</option>
-      <option value="3">SEA 3</option>
-    </select>
+ <!-- ADMIN BUTTON -->
+ <button class="admin-btn" onclick="admin()">Admin Mode</button>
 
-    <input id="job" placeholder="Paste JOBID">
-
-    <button onclick="join()">JOIN SERVER</button>
-
-    <div class="status" id="status"></div>
-
-    <div class="history" id="history"></div>
-  </div>
+ <!-- ADMIN PANEL -->
+ <div id="adminPanel" class="admin hidden">
+   <input id="email" placeholder="Admin email">
+   <button onclick="unlock()">UNLOCK</button>
+   <div class="history" id="history"></div>
+ </div>
 
 </div>
 
 <script>
-const ALLOWED_EMAIL = "alexcamargogarcia@gmail.com";
-const SEA_PLACE = {
-  1:2753915549,
-  2:4442272183,
-  3:7449423635
+const ADMIN_EMAIL="alexcamargogarcia@gmail.com";
+const SEA_PLACE={
+ 1:2753915549,
+ 2:4442272183,
+ 3:7449423635
 };
 
-if(localStorage.getItem("shxdow_auth")==="1"){
-  unlock();
-}
-
-function login(){
-  const email=document.getElementById("email").value.trim();
-  if(email!==ALLOWED_EMAIL){
-    document.getElementById("loginStatus").innerText="Access denied";
-    return;
-  }
-  localStorage.setItem("shxdow_auth","1");
-  unlock();
-}
-
-function unlock(){
-  document.getElementById("login").classList.add("hidden");
-  document.getElementById("panel").classList.remove("hidden");
+if(localStorage.getItem("shxdow_admin")==="1"){
+ document.getElementById("adminPanel").classList.remove("hidden");
+ render();
 }
 
 function join(){
-  const job=document.getElementById("job").value.trim();
-  const sea=document.getElementById("sea").value;
-  if(!job)return;
+ const job=document.getElementById("job").value.trim();
+ if(!job)return;
+ const sea=document.getElementById("sea").value;
+ const place=SEA_PLACE[sea];
+ document.getElementById("status").innerText="Opening Roblox...";
 
-  const place=SEA_PLACE[sea];
-  document.getElementById("status").innerText="Opening Roblox...";
+ save(job,sea);
 
-  save(job,sea);
+ location.href=`roblox://experiences/start?placeId=${place}&gameInstanceId=${job}`;
+ setTimeout(()=>{
+  location.href=`https://www.roblox.com/games/${place}?placeInstanceId=${job}`;
+ },2000);
+}
 
-  location.href=`roblox://experiences/start?placeId=${place}&gameInstanceId=${job}`;
-  setTimeout(()=>{
-    location.href=`https://www.roblox.com/games/${place}?placeInstanceId=${job}`;
-  },2000);
+function admin(){
+ document.getElementById("adminPanel").classList.toggle("hidden");
+}
+
+function unlock(){
+ const e=document.getElementById("email").value.trim();
+ if(e!==ADMIN_EMAIL)return alert("Access denied");
+ localStorage.setItem("shxdow_admin","1");
+ render();
 }
 
 function save(job,sea){
-  const h=JSON.parse(localStorage.getItem("shxdow_history")||"[]");
-  h.unshift(`SEA ${sea} • ${job}`);
-  localStorage.setItem("shxdow_history",JSON.stringify(h.slice(0,10)));
-  render();
+ let h=JSON.parse(localStorage.getItem("shxdow_history")||"[]");
+ h.unshift(`SEA ${sea} • ${job}`);
+ localStorage.setItem("shxdow_history",JSON.stringify(h.slice(0,10)));
 }
 
 function render(){
-  const h=JSON.parse(localStorage.getItem("shxdow_history")||"[]");
-  const el=document.getElementById("history");
-  el.innerHTML=h.map(x=>`<div>${x}</div>`).join("");
+ let h=JSON.parse(localStorage.getItem("shxdow_history")||"[]");
+ document.getElementById("history").innerHTML=
+  h.map(x=>`<div>${x}</div>`).join("");
 }
-render();
 </script>
 
 </body>

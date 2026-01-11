@@ -1,200 +1,269 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SHXDOW</title>
+<title>Rayz Hub • JobId Joiner</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root{
-  --bg:#050508;
-  --card:rgba(255,255,255,.05);
-  --border:rgba(255,255,255,.18);
-  --muted:rgba(255,255,255,.65);
+  --bg:#0a0a0a;
+  --card:#111;
+  --border:#222;
+  --text:#f5f5f5;
+  --muted:#9a9a9a;
+  --neo:#7b7cff;
 }
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Segoe UI,system-ui,sans-serif;
-}
-
+*{box-sizing:border-box;}
 body{
-  min-height:100vh;
-  background:radial-gradient(circle at top,#111,transparent 40%),var(--bg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
+  margin:0;
+  font-family:Inter,system-ui;
+  background:radial-gradient(circle at top,#111,#000);
+  color:var(--text);
 }
-
+.wrap{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
 .card{
-  width:440px;
-  max-width:92%;
   background:var(--card);
-  padding:40px;
-  border-radius:26px;
   border:1px solid var(--border);
-  box-shadow:0 0 60px rgba(255,255,255,.08);
-  animation:fade .8s ease;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 0 30px #000;
 }
-
-@keyframes fade{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1}
+h1,h3{
+  margin:0 0 10px;
 }
-
 h1{
   text-align:center;
-  letter-spacing:4px;
+  color:var(--neo);
 }
-
 .sub{
   text-align:center;
   color:var(--muted);
-  margin-bottom:25px;
+  margin-bottom:10px;
 }
-
-/* 🔐 INPUTS VISIBLES */
-input,select{
+input,textarea{
   width:100%;
-  padding:14px;
-  margin:10px 0;
-  border-radius:14px;
+  padding:12px;
+  border-radius:12px;
   border:1px solid var(--border);
-  background:#000;
-  color:#fff;              /* ← CLAVE */
-  outline:none;
+  background:#0c0c0c;
+  color:#fff;
+  margin:6px 0;
 }
-
-input::placeholder{
-  color:rgba(255,255,255,.45);
-}
-
 button{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border:none;
-  border-radius:40px;
-  background:#fff;
+  background:var(--neo);
   color:#000;
+  border:none;
+  padding:12px 20px;
+  border-radius:999px;
   font-weight:700;
   cursor:pointer;
-  transition:.3s;
+  transition:.25s;
 }
-
 button:hover{
-  transform:translateY(-3px);
-  box-shadow:0 14px 40px rgba(255,255,255,.6);
+  transform:translateY(-2px);
+  box-shadow:0 0 20px var(--neo);
 }
-
-.small{
-  text-align:center;
-  font-size:.85rem;
-  opacity:.6;
-  margin-top:8px;
-}
-
 hr{
   border:none;
   height:1px;
-  background:rgba(255,255,255,.15);
-  margin:22px 0;
+  background:#222;
+  margin:20px 0;
 }
+.scripts{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:16px;
+}
+.script{
+  background:#0c0c0c;
+  border:1px solid #1f1f1f;
+  border-radius:16px;
+  overflow:hidden;
+  transition:.3s;
+}
+.script:hover{
+  transform:translateY(-4px);
+  border-color:var(--neo);
+}
+.script img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+.script .p{
+  padding:14px;
+}
+.script h4{margin:0;}
+.muted{color:var(--muted);font-size:.9em;}
+.actions{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+}
+.small{
+  text-align:center;
+  color:var(--muted);
+}
+.hidden{display:none;}
 </style>
 </head>
-
 <body>
 
-<div class="card">
-  <h1>SHXDOW</h1>
-  <div class="sub">Blox Fruits Server Join</div>
+<div class="wrap">
 
-  <!-- 🌍 PUBLIC -->
-  <select id="sea">
-    <option value="1">SEA 1</option>
-    <option value="2">SEA 2</option>
-    <option value="3">SEA 3</option>
-  </select>
+  <!-- MAIN -->
+  <div class="card">
+    <h1>Rayz Hub</h1>
+    <div class="sub">Instant JobId Server Joiner</div>
 
-  <input id="job" placeholder="Paste JOBID">
+    <input id="jobId" placeholder="Enter JobId">
+    <button onclick="join()">Join Server</button>
 
-  <button onclick="join()">JOIN SERVER</button>
+    <hr>
+    <h3 style="color:var(--neo)">Scripts</h3>
+    <div id="publicScripts" class="scripts"></div>
+  </div>
 
-  <hr>
+  <!-- ADMIN LOGIN -->
+  <div class="card">
+    <h3>Admin Panel</h3>
+    <input id="adminMail" placeholder="Admin Email">
+    <input id="adminPass" type="password" placeholder="Password">
+    <button onclick="login()">Unlock</button>
+  </div>
 
-  <!-- 👑 ADMIN LOGIN -->
-  <input id="email" type="email" placeholder="Admin email">
-  <input id="password" type="password" placeholder="Admin password">
+  <!-- ADMIN DASH -->
+  <div id="adminPanel" class="card hidden">
+    <h3>Manage Scripts</h3>
 
-  <button onclick="unlock()">UNLOCK</button>
+    <input id="sTitle" placeholder="Script title">
+    <input id="sImg" placeholder="Image URL">
+    <textarea id="sDesc" placeholder="Description"></textarea>
+    <textarea id="sCode" placeholder="Lua Script Code"></textarea>
+    <button onclick="addScript()">Add Script</button>
 
-  <div class="small" id="status"></div>
+    <hr>
+    <div id="adminScripts" class="scripts"></div>
+  </div>
+
 </div>
 
 <script>
-/* ===== CONFIG ===== */
+const PLACE_ID = 2753915549;
 const ADMIN_EMAIL = "alexcamargogarcia@gmail.com";
-const ADMIN_PASS  = "190488";
+const ADMIN_PASS = "190488";
 
-const SEA_PLACE = {
-  1:2753915549,
-  2:4442272183,
-  3:7449423635
-};
+// ELEMENTOS DEL DOM
+const jobId = document.getElementById("jobId");
+const adminMail = document.getElementById("adminMail");
+const adminPass = document.getElementById("adminPass");
+const adminPanel = document.getElementById("adminPanel");
 
-/* ===== JOIN ===== */
+const sTitle = document.getElementById("sTitle");
+const sImg = document.getElementById("sImg");
+const sDesc = document.getElementById("sDesc");
+const sCode = document.getElementById("sCode");
+
+const publicScripts = document.getElementById("publicScripts");
+const adminScripts = document.getElementById("adminScripts");
+
+// FUNCIONES
 function join(){
-  const job = document.getElementById("job").value.trim();
-  if(!job) return;
-
-  const sea = document.getElementById("sea").value;
-  const place = SEA_PLACE[sea];
-
-  saveJob(job, sea);
-
-  location.href = `roblox://experiences/start?placeId=${place}&gameInstanceId=${job}`;
-  setTimeout(() => {
-    location.href = `https://www.roblox.com/games/${place}?placeInstanceId=${job}`;
-  }, 2000);
+  const j = jobId.value.trim();
+  if(!j) return alert("JobId missing");
+  location.href = `roblox://experiences/start?placeId=${PLACE_ID}&gameInstanceId=${j}`;
+  setTimeout(()=>{
+    location.href=`https://www.roblox.com/games/${PLACE_ID}?placeInstanceId=${j}`;
+  },1500);
 }
 
-/* ===== ADMIN UNLOCK ===== */
-function unlock(){
-  const email = document.getElementById("email").value.trim();
-  const pass  = document.getElementById("password").value.trim();
+function load(){
+  return JSON.parse(localStorage.getItem("rayz_scripts")||"[]");
+}
 
-  if(email === ADMIN_EMAIL && pass === ADMIN_PASS){
-    localStorage.setItem("shxdow_admin", "1");
-    location.href = "admin.html";
-  }else{
-    saveDenied(email);
-    document.getElementById("status").innerText = "Access denied";
+function save(d){
+  localStorage.setItem("rayz_scripts",JSON.stringify(d));
+}
+
+function renderPublicScripts(){
+  const d = load();
+  publicScripts.innerHTML = d.map(s=>`
+    <div class="script">
+      <img src="${s.img}" alt="${s.title}">
+      <div class="p">
+        <h4>${s.title}</h4>
+        <div class="muted">${s.desc}</div>
+        <div class="actions">
+          <button onclick="navigator.clipboard.writeText(\`${s.code}\`)">
+            Copy Code
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join("") || "<div class='small'>No scripts yet</div>";
+}
+
+function renderAdmin(){
+  const d = load();
+  adminScripts.innerHTML = d.map((s,i)=>`
+    <div class="script">
+      <img src="${s.img}" alt="${s.title}">
+      <div class="p">
+        <h4>${s.title}</h4>
+        <div class="actions">
+          <button onclick="del(${i})">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join("") || "<div class='small'>No scripts yet</div>";
+}
+
+function addScript(){
+  const title = sTitle.value.trim();
+  const img = sImg.value.trim();
+  const desc = sDesc.value.trim();
+  const code = sCode.value.trim();
+
+  if(!title || !code){
+    return alert("Title and Code are required!");
+  }
+
+  const d = load();
+  d.push({title,img,desc,code});
+  save(d);
+  renderPublicScripts();
+  renderAdmin();
+
+  // Limpiar inputs
+  sTitle.value = sImg.value = sDesc.value = sCode.value = "";
+}
+
+function del(i){
+  const d = load();
+  d.splice(i,1);
+  save(d);
+  renderPublicScripts();
+  renderAdmin();
+}
+
+function login(){
+  if(adminMail.value===ADMIN_EMAIL && adminPass.value===ADMIN_PASS){
+    adminPanel.classList.remove("hidden");
+    renderAdmin();
+    adminMail.value = adminPass.value = "";
+  } else {
+    alert("Access denied");
   }
 }
 
-/* ===== STORAGE ===== */
-function saveJob(job, sea){
-  let h = JSON.parse(localStorage.getItem("jobs") || "[]");
-  h.unshift({
-    job: job,
-    sea: sea,
-    time: new Date().toLocaleString()
-  });
-  localStorage.setItem("jobs", JSON.stringify(h.slice(0,30)));
-}
-
-function saveDenied(email){
-  let d = JSON.parse(localStorage.getItem("denied") || "[]");
-  d.unshift({
-    email: email || "(empty)",
-    time: new Date().toLocaleString()
-  });
-  localStorage.setItem("denied", JSON.stringify(d.slice(0,30)));
-}
+// RENDER INICIAL
+renderPublicScripts();
 </script>
-
 </body>
 </html>

@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Rayz Hub • JobId Joiner</title>
+<title>Shxdow Hub • JobId Joiner</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root{
-  --bg:#0a0a0a;
-  --card:#111;
-  --border:#222;
-  --text:#f5f5f5;
-  --muted:#9a9a9a;
-  --neo:#7b7cff;
+  --bg:#111;             /* Fondo general */
+  --card:#1c1c1c;        /* Fondo de tarjetas */
+  --border:#333;          /* Bordes */
+  --text:#fff;            /* Texto principal */
+  --muted:#aaa;           /* Texto secundario */
+  --neo:#00f0ff;          /* Azul neo */
 }
 *{box-sizing:border-box;}
 body{
   margin:0;
-  font-family:Inter,system-ui;
-  background:radial-gradient(circle at top,#111,#000);
+  font-family:'Inter',system-ui;
+  background:radial-gradient(circle at top,#222,#111);
   color:var(--text);
 }
 .wrap{
@@ -40,20 +40,29 @@ h1,h3{
 h1{
   text-align:center;
   color:var(--neo);
+  font-size:2.2em;
+  letter-spacing:1px;
 }
 .sub{
   text-align:center;
   color:var(--muted);
   margin-bottom:10px;
+  font-size:1em;
 }
 input,textarea{
   width:100%;
   padding:12px;
   border-radius:12px;
   border:1px solid var(--border);
-  background:#0c0c0c;
+  background:#111;
   color:#fff;
   margin:6px 0;
+  transition:.25s;
+}
+input:focus,textarea:focus{
+  outline:none;
+  border-color:var(--neo);
+  box-shadow:0 0 8px var(--neo);
 }
 button{
   background:var(--neo);
@@ -72,7 +81,7 @@ button:hover{
 hr{
   border:none;
   height:1px;
-  background:#222;
+  background:#333;
   margin:20px 0;
 }
 .scripts{
@@ -81,8 +90,8 @@ hr{
   gap:16px;
 }
 .script{
-  background:#0c0c0c;
-  border:1px solid #1f1f1f;
+  background:#111;
+  border:1px solid #333;
   border-radius:16px;
   overflow:hidden;
   transition:.3s;
@@ -90,6 +99,7 @@ hr{
 .script:hover{
   transform:translateY(-4px);
   border-color:var(--neo);
+  box-shadow:0 0 15px var(--neo);
 }
 .script img{
   width:100%;
@@ -105,6 +115,7 @@ hr{
   margin-top:10px;
   display:flex;
   gap:8px;
+  flex-wrap:wrap;
 }
 .small{
   text-align:center;
@@ -119,7 +130,7 @@ hr{
 
   <!-- MAIN -->
   <div class="card">
-    <h1>Rayz Hub</h1>
+    <h1>Shxdow Hub</h1>
     <div class="sub">Instant JobId Server Joiner</div>
 
     <input id="jobId" placeholder="Enter JobId">
@@ -184,25 +195,23 @@ function join(){
 }
 
 function load(){
-  return JSON.parse(localStorage.getItem("rayz_scripts")||"[]");
+  return JSON.parse(localStorage.getItem("shxdow_scripts")||"[]");
 }
 
 function save(d){
-  localStorage.setItem("rayz_scripts",JSON.stringify(d));
+  localStorage.setItem("shxdow_scripts",JSON.stringify(d));
 }
 
 function renderPublicScripts(){
   const d = load();
   publicScripts.innerHTML = d.map(s=>`
     <div class="script">
-      <img src="${s.img}" alt="${s.title}">
+      <img src="${s.img || 'https://via.placeholder.com/250x140?text=No+Image'}" alt="${s.title}">
       <div class="p">
         <h4>${s.title}</h4>
-        <div class="muted">${s.desc}</div>
+        <div class="muted">${s.desc || ''}</div>
         <div class="actions">
-          <button onclick="navigator.clipboard.writeText(\`${s.code}\`)">
-            Copy Code
-          </button>
+          <button onclick="navigator.clipboard.writeText(\`${s.code}\`)">Copy Code</button>
         </div>
       </div>
     </div>
@@ -213,7 +222,7 @@ function renderAdmin(){
   const d = load();
   adminScripts.innerHTML = d.map((s,i)=>`
     <div class="script">
-      <img src="${s.img}" alt="${s.title}">
+      <img src="${s.img || 'https://via.placeholder.com/250x140?text=No+Image'}" alt="${s.title}">
       <div class="p">
         <h4>${s.title}</h4>
         <div class="actions">
@@ -240,7 +249,6 @@ function addScript(){
   renderPublicScripts();
   renderAdmin();
 
-  // Limpiar inputs
   sTitle.value = sImg.value = sDesc.value = sCode.value = "";
 }
 
@@ -265,5 +273,6 @@ function login(){
 // RENDER INICIAL
 renderPublicScripts();
 </script>
+
 </body>
 </html>

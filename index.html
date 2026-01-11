@@ -7,12 +7,12 @@
 
 <style>
 :root{
-  --bg:#111;             /* Fondo general */
-  --card:#1c1c1c;        /* Fondo de tarjetas */
-  --border:#333;          /* Bordes */
-  --text:#fff;            /* Texto principal */
-  --muted:#aaa;           /* Texto secundario */
-  --neo:#00f0ff;          /* Azul neo */
+  --bg:#111;
+  --card:#1c1c1c;
+  --border:#333;
+  --text:#fff;
+  --muted:#aaa;
+  --neo:#00f0ff;
 }
 *{box-sizing:border-box;}
 body{
@@ -34,9 +34,7 @@ body{
   margin-bottom:20px;
   box-shadow:0 0 30px #000;
 }
-h1,h3{
-  margin:0 0 10px;
-}
+h1,h3{margin:0 0 10px;}
 h1{
   text-align:center;
   color:var(--neo);
@@ -138,7 +136,9 @@ hr{
 
     <hr>
     <h3 style="color:var(--neo)">Scripts</h3>
-    <div id="publicScripts" class="scripts"></div>
+    <div id="publicScripts" class="scripts">
+      <div class="small">Loading scripts...</div>
+    </div>
   </div>
 
   <!-- ADMIN LOGIN -->
@@ -151,26 +151,30 @@ hr{
 
   <!-- ADMIN DASH -->
   <div id="adminPanel" class="card hidden">
-    <h3>Manage Scripts</h3>
+    <h3>Manage Scripts (local)</h3>
 
     <input id="sTitle" placeholder="Script title">
     <input id="sImg" placeholder="Image URL">
     <textarea id="sDesc" placeholder="Description"></textarea>
     <textarea id="sCode" placeholder="Lua Script Code"></textarea>
-    <button onclick="addScript()">Add Script</button>
+    <button onclick="addScript()">Add Script (Local)</button>
 
     <hr>
-    <div id="adminScripts" class="scripts"></div>
+    <div id="adminScripts" class="scripts">
+      <div class="small">No scripts added locally</div>
+    </div>
   </div>
 
 </div>
 
 <script>
+// CONFIG
 const PLACE_ID = 2753915549;
 const ADMIN_EMAIL = "alexcamargogarcia@gmail.com";
 const ADMIN_PASS = "190488";
+const SCRIPTS_URL = 'https://alexcamargogarcia-lang.github.io/SHXDOW.COM/scripts.json';
 
-// ELEMENTOS DEL DOM
+// DOM ELEMENTS
 const jobId = document.getElementById("jobId");
 const adminMail = document.getElementById("adminMail");
 const adminPass = document.getElementById("adminPass");
@@ -194,32 +198,38 @@ function join(){
   },1500);
 }
 
-function load(){
-  return JSON.parse(localStorage.getItem("shxdow_scripts")||"[]");
-}
-
-function save(d){
-  localStorage.setItem("shxdow_scripts",JSON.stringify(d));
-}
-
-function renderPublicScripts(){
-  const d = load();
-  publicScripts.innerHTML = d.map(s=>`
-    <div class="script">
-      <img src="${s.img || 'https://via.placeholder.com/250x140?text=No+Image'}" alt="${s.title}">
-      <div class="p">
-        <h4>${s.title}</h4>
-        <div class="muted">${s.desc || ''}</div>
-        <div class="actions">
-          <button onclick="navigator.clipboard.writeText(\`${s.code}\`)">Copy Code</button>
+async function renderPublicScripts(){
+  try{
+    const res = await fetch(SCRIPTS_URL);
+    const scripts = await res.json();
+    publicScripts.innerHTML = scripts.map(s=>`
+      <div class="script">
+        <img src="${s.img || 'https://via.placeholder.com/250x140?text=No+Image'}" alt="${s.title}">
+        <div class="p">
+          <h4>${s.title}</h4>
+          <div class="muted">${s.desc || ''}</div>
+          <div class="actions">
+            <button onclick="navigator.clipboard.writeText(\`${s.code}\`)">Copy Code</button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join("") || "<div class='small'>No scripts yet</div>";
+    `).join('') || "<div class='small'>No scripts yet</div>";
+  }catch(err){
+    console.error(err);
+    publicScripts.innerHTML = "<div class='small'>Error loading scripts</div>";
+  }
+}
+
+// Local storage para el admin
+function loadLocal(){
+  return JSON.parse(localStorage.getItem("shxdow_scripts_local")||"[]");
+}
+function saveLocal(d){
+  localStorage.setItem("shxdow_scripts_local", JSON.stringify(d));
 }
 
 function renderAdmin(){
-  const d = load();
+  const d = loadLocal();
   adminScripts.innerHTML = d.map((s,i)=>`
     <div class="script">
       <img src="${s.img || 'https://via.placeholder.com/250x140?text=No+Image'}" alt="${s.title}">
@@ -230,7 +240,7 @@ function renderAdmin(){
         </div>
       </div>
     </div>
-  `).join("") || "<div class='small'>No scripts yet</div>";
+  `).join('') || "<div class='small'>No scripts added locally</div>";
 }
 
 function addScript(){
@@ -238,25 +248,20 @@ function addScript(){
   const img = sImg.value.trim();
   const desc = sDesc.value.trim();
   const code = sCode.value.trim();
+  if(!title || !code) return alert("Title and Code are required!");
 
-  if(!title || !code){
-    return alert("Title and Code are required!");
-  }
-
-  const d = load();
+  const d = loadLocal();
   d.push({title,img,desc,code});
-  save(d);
-  renderPublicScripts();
+  saveLocal(d);
   renderAdmin();
 
   sTitle.value = sImg.value = sDesc.value = sCode.value = "";
 }
 
 function del(i){
-  const d = load();
+  const d = loadLocal();
   d.splice(i,1);
-  save(d);
-  renderPublicScripts();
+  saveLocal(d);
   renderAdmin();
 }
 
@@ -270,7 +275,7 @@ function login(){
   }
 }
 
-// RENDER INICIAL
+// Inicial
 renderPublicScripts();
 </script>
 

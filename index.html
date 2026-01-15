@@ -1,308 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Shxdow Hub • JobId Joiner</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-:root{
-  --bg:#111;
-  --card:#1c1c1c;
-  --border:#333;
-  --text:#fff;
-  --muted:#aaa;
-  --neo:#00f0ff;
-}
-*{box-sizing:border-box;}
-body{
-  margin:0;
-  font-family:'Inter',system-ui;
-  background:radial-gradient(circle at top,#222,#111);
-  color:var(--text);
-}
-.wrap{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
-}
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 0 30px #000;
-}
-h1,h3{margin:0 0 10px;}
-h1{
-  text-align:center;
-  color:var(--neo);
-  font-size:2.2em;
-  letter-spacing:1px;
-}
-.sub{
-  text-align:center;
-  color:var(--muted);
-  margin-bottom:10px;
-  font-size:1em;
-}
-input,textarea{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
-  background:#111;
-  color:#fff;
-  margin:6px 0;
-  transition:.25s;
-}
-input:focus,textarea:focus{
-  outline:none;
-  border-color:var(--neo);
-  box-shadow:0 0 8px var(--neo);
-}
-button{
-  background:var(--neo);
-  color:#000;
-  border:none;
-  padding:12px 20px;
-  border-radius:999px;
-  font-weight:700;
-  cursor:pointer;
-  transition:.25s;
-}
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 20px var(--neo);
-}
-hr{
-  border:none;
-  height:1px;
-  background:#333;
-  margin:20px 0;
-}
-.scripts{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:16px;
-}
-.script{
-  background:#111;
-  border:1px solid #333;
-  border-radius:16px;
-  overflow:hidden;
-  transition:.3s;
-}
-.script:hover{
-  transform:translateY(-4px);
-  border-color:var(--neo);
-  box-shadow:0 0 15px var(--neo);
-}
-.script img{
-  width:100%;
-  height:140px;
-  object-fit:cover;
-}
-.script .p{
-  padding:14px;
-}
-.script h4{margin:0;}
-.muted{color:var(--muted);font-size:.9em;}
-.actions{
-  margin-top:10px;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.small{
-  text-align:center;
-  color:var(--muted);
-}
-.hidden{display:none;}
-
-/* Botón flotante Pau */
-#pauBtn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:var(--neo);
-  color:#000;
-  padding:10px 15px;
-  border-radius:50px;
-  font-weight:700;
-  cursor:pointer;
-  z-index:999;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloxyPirates - Tienda de Roblox</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="wrap">
-
-  <!-- MAIN -->
-  <div class="card">
-    <h1>Shxdow Hub</h1>
-    <div class="sub">Instant JobId Server Joiner</div>
-
-    <input id="jobId" placeholder="Enter JobId">
-    <button onclick="join()">Join Server</button>
-
-    <hr>
-    <h3 style="color:var(--neo)">Scripts</h3>
-    <div id="publicScripts" class="scripts">
-      <div class="small">Loading scripts...</div>
+<header class="header">
+    <div class="container">
+        <h1 class="logo">BloxyPirates</h1>
+        <nav>
+            <a href="#productos">Productos</a>
+            <a href="#por-qué">¿Por qué nosotros?</a>
+            <a href="#faq">FAQ</a>
+        </nav>
     </div>
-  </div>
+</header>
 
-  <!-- ADMIN LOGIN -->
-  <div class="card">
-    <h3>Admin Panel</h3>
-    <input id="adminMail" placeholder="Admin Email">
-    <input id="adminPass" type="password" placeholder="Password">
-    <button onclick="login()">Unlock</button>
-  </div>
+<section class="hero container">
+    <h2>Compra Blox Fruits y más al instante</h2>
+    <p>Entrega rápida • Pago seguro • Precios baratos</p>
+    <a href="#productos" class="btn">Empezar</a>
+</section>
 
-  <!-- ADMIN DASH -->
-  <div id="adminPanel" class="card hidden">
-    <h3>Manage Scripts (local)</h3>
+<section id="productos" class="productos container">
+    <h2>Productos Destacados</h2>
+    <div class="grid">
 
-    <input id="sTitle" placeholder="Script title">
-    <input id="sImg" placeholder="Image URL">
-    <textarea id="sDesc" placeholder="Description"></textarea>
-    <textarea id="sCode" placeholder="Lua Script Code"></textarea>
-    <button onclick="addScript()">Add Script (Local)</button>
-
-    <hr>
-    <div id="adminScripts" class="scripts">
-      <div class="small">No scripts added locally</div>
-    </div>
-  </div>
-
-</div>
-
-<!-- Botón Pau -->
-<button id="pauBtn">Pau</button>
-
-<script>
-// CONFIG
-const PLACE_ID = 2753915549;
-const ADMIN_EMAIL = "alexcamargogarcia@gmail.com";
-const ADMIN_PASS = "1904111188";
-const SCRIPTS_URL = 'https://alexcamargogarcia-lang.github.io/SHXDOW.COM/scripts.json';
-
-// DOM
-const jobId = document.getElementById("jobId");
-const adminMail = document.getElementById("adminMail");
-const adminPass = document.getElementById("adminPass");
-const adminPanel = document.getElementById("adminPanel");
-
-const sTitle = document.getElementById("sTitle");
-const sImg = document.getElementById("sImg");
-const sDesc = document.getElementById("sDesc");
-const sCode = document.getElementById("sCode");
-
-const publicScripts = document.getElementById("publicScripts");
-const adminScripts = document.getElementById("adminScripts");
-
-// FUNCIONES
-function join(){
-  const j = jobId.value.trim();
-  if(!j) return alert("JobId missing");
-  location.href = `roblox://experiences/start?placeId=${PLACE_ID}&gameInstanceId=${j}`;
-  setTimeout(()=>{
-    location.href=`https://www.roblox.com/games/${PLACE_ID}?placeInstanceId=${j}`;
-  },1500);
-}
-
-async function renderPublicScripts(){
-  try{
-    const res = await fetch(SCRIPTS_URL);
-    const scripts = await res.json();
-    publicScripts.innerHTML = scripts.map(s=>`
-      <div class="script">
-        <img src="${s.img || 'https://via.placeholder.com/250x140?text=No+Image'}" alt="${s.title}">
-        <div class="p">
-          <h4>${s.title}</h4>
-          <div class="muted">${s.desc || ''}</div>
-          <div class="actions">
-            <button onclick="navigator.clipboard.writeText(\`${s.code}\`)">Copy Code</button>
-          </div>
+        <!-- Producto ejemplo -->
+        <div class="card">
+            <h3>💠 Winter 2025 Fruit Box ×10</h3>
+            <p class="price">$13.59</p>
+            <button>Añadir al carrito</button>
         </div>
-      </div>
-    `).join('') || "<div class='small'>No scripts yet</div>";
-  }catch(err){
-    console.error(err);
-    publicScripts.innerHTML = "<div class='small'>Error loading scripts</div>";
-  }
-}
 
-// Admin local
-function loadLocal(){
-  return JSON.parse(localStorage.getItem("shxdow_scripts_local")||"[]");
-}
-function saveLocal(d){
-  localStorage.setItem("shxdow_scripts_local", JSON.stringify(d));
-}
-
-function renderAdmin(){
-  const d = loadLocal();
-  adminScripts.innerHTML = d.map((s,i)=>`
-    <div class="script">
-      <img src="${s.img || 'https://via.placeholder.com/250x140?text=No+Image'}" alt="${s.title}">
-      <div class="p">
-        <h4>${s.title}</h4>
-        <div class="actions">
-          <button onclick="del(${i})">Delete</button>
+        <div class="card">
+            <h3>🔥 Fox Spirit Bundle</h3>
+            <p class="price">$19.99</p>
+            <button>Añadir al carrito</button>
         </div>
-      </div>
+
+        <div class="card">
+            <h3>💠 Winter 2025 Fruit Box ×3</h3>
+            <p class="price">$4.59</p>
+            <button>Añadir al carrito</button>
+        </div>
+
     </div>
-  `).join('') || "<div class='small'>No scripts added locally</div>";
-}
+</section>
 
-function addScript(){
-  const title = sTitle.value.trim();
-  const img = sImg.value.trim();
-  const desc = sDesc.value.trim();
-  const code = sCode.value.trim();
-  if(!title || !code) return alert("Title and Code are required!");
+<section id="por-qué" class="por-qué container">
+    <h2>¿Por qué elegirnos?</h2>
+    <div class="features">
+        <div>✅ Entrega rápida</div>
+        <div>🔒 Pago seguro</div>
+        <div>💸 Precios baratos</div>
+        <div>🛠️ Soporte 24/7</div>
+    </div>
+</section>
 
-  const d = loadLocal();
-  d.push({title,img,desc,code});
-  saveLocal(d);
-  renderAdmin();
+<section id="faq" class="faq container">
+    <h2>Preguntas frecuentes</h2>
+    <p><strong>¿Es legítimo?</strong> Sí, tenemos reseñas positivas de clientes aquí.</p>
+    <p><strong>¿Me pueden banear?</strong> No, no se reportan baneos por usar este sitio.</p>
+    <p><strong>¿Cómo recibo mi ítem?</strong> Después de comprar, deberás crear un ticket en el servidor de Discord para recibir tus artículos rápidamente.</p>
+</section>
 
-  sTitle.value = sImg.value = sDesc.value = sCode.value = "";
-}
-
-function del(i){
-  const d = loadLocal();
-  d.splice(i,1);
-  saveLocal(d);
-  renderAdmin();
-}
-
-function login(){
-  if(adminMail.value===ADMIN_EMAIL && adminPass.value===ADMIN_PASS){
-    adminPanel.classList.remove("hidden");
-    renderAdmin();
-    adminMail.value = adminPass.value = "";
-  } else {
-    alert("Access denied");
-  }
-}
-
-// Botón Pau
-document.getElementById('pauBtn').onclick = () => {
-  window.location.href = 'pau.html';
-}
-
-// Inicial
-renderPublicScripts();
-</script>
+<footer class="footer container">
+    <p>© 2026 BloxyPirates • Todos los derechos reservados</p>
+</footer>
 
 </body>
 </html>
-
-
-

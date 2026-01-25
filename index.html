@@ -1,77 +1,125 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BloxyPirates</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloxy Pirates Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://www.paypal.com/sdk/js?client-id=AcdNg73RgAusjIw66QOUl1w_qbRxaTMdrDIq0YeW57uiJl41I_hxhGwjEwqKIvvk03VdAcLYv32iKJPP&currency=USD"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
+    body{background:#0b0f1a;color:#fff}
+    header{padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:#0f1424}
+    header h1{color:#4da3ff}
+    .cart-btn{background:#1e90ff;border:none;color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer}
+    .hero{padding:60px 40px;text-align:center}
+    .hero h2{font-size:42px;margin-bottom:10px}
+    .hero p{opacity:.7}
+    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px;padding:40px}
+    .card{background:#121833;border-radius:16px;padding:20px;box-shadow:0 0 30px rgba(0,0,0,.4)}
+    .card img{width:100%;border-radius:12px}
+    .card h3{margin:15px 0 5px}
+    .card p{opacity:.7;font-size:14px}
+    .price{margin:10px 0;font-weight:600}
+    .card button{width:100%;padding:10px;border:none;border-radius:10px;background:#1e90ff;color:#fff;font-weight:600;cursor:pointer}
+    .cart{position:fixed;top:0;right:-100%;width:360px;height:100%;background:#0f1424;padding:20px;transition:.4s;overflow:auto}
+    .cart.active{right:0}
+    .cart h2{margin-bottom:15px}
+    .cart-item{display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px}
+    #paypal-button-container{margin-top:20px}
+  </style>
 </head>
-
 <body>
 
-<header class="topbar">
-  <div class="logo">BloxyPirates</div>
-  <nav>
-    <a href="#shop">Shop</a>
-    <a href="#why">Why us</a>
-    <a href="#faq">FAQ</a>
-  </nav>
+<header>
+  <h1>Bloxy Pirates</h1>
+  <button class="cart-btn" onclick="toggleCart()">🛒 Cart</button>
 </header>
 
 <section class="hero">
-  <h1>Buy Blox Fruits Items Instantly</h1>
-  <p>Fast delivery • Secure payments • Trusted service</p>
-  <a href="#shop" class="hero-btn">Shop Now</a>
+  <h2>Blox Fruits Items Shop</h2>
+  <p>Fast delivery • Secure payments • Trusted seller</p>
 </section>
 
-<section id="shop" class="shop">
-  <h2>Featured Products</h2>
+<section class="products">
+  <div class="card">
+    <img src="https://i.imgur.com/L8J5FQb.png">
+    <h3>Leopard Fruit</h3>
+    <p>Mythical fruit</p>
+    <div class="price">$10.00</div>
+    <button onclick="addToCart('Leopard Fruit',10)">Add to Cart</button>
+  </div>
 
-  <div class="products">
+  <div class="card">
+    <img src="https://i.imgur.com/Jl4ZC0n.png">
+    <h3>Dough Fruit</h3>
+    <p>Awakened power</p>
+    <div class="price">$8.00</div>
+    <button onclick="addToCart('Dough Fruit',8)">Add to Cart</button>
+  </div>
 
-    <div class="product">
-      <img src="https://static.wikia.nocookie.net/blox-fruits/images/6/6b/DragonFruit.png">
-      <h3>Dragon Fruit (Permanent)</h3>
-      <span>$13.59</span>
-      <button>Buy</button>
-    </div>
+  <div class="card">
+    <img src="https://i.imgur.com/8qGQkCw.png">
+    <h3>Dragon Fruit</h3>
+    <p>Legendary beast</p>
+    <div class="price">$12.00</div>
+    <button onclick="addToCart('Dragon Fruit',12)">Add to Cart</button>
+  </div>
 
-    <div class="product">
-      <img src="https://static.wikia.nocookie.net/blox-fruits/images/9/91/LeopardFruit.png">
-      <h3>Leopard Fruit</h3>
-      <span>$19.99</span>
-      <button>Buy</button>
-    </div>
+  <div class="card">
+    <img src="https://i.imgur.com/3H7QZxK.png">
+    <h3>Beli (1B)</h3>
+    <p>In‑game currency</p>
+    <div class="price">$5.00</div>
+    <button onclick="addToCart('1 Billion Beli',5)">Add to Cart</button>
+  </div>
 
-    <div class="product">
-      <img src="https://static.wikia.nocookie.net/blox-fruits/images/3/34/DoughFruit.png">
-      <h3>Dough Fruit</h3>
-      <span>$4.59</span>
-      <button>Buy</button>
-    </div>
+  <div class="card">
+    <img src="https://i.imgur.com/2Yp1K7W.png">
+    <h3>Fragments (100K)</h3>
+    <p>Awakening currency</p>
+    <div class="price">$6.00</div>
+    <button onclick="addToCart('100K Fragments',6)">Add to Cart</button>
+  </div>
 
+  <div class="card">
+    <img src="https://i.imgur.com/8xg5H5B.png">
+    <h3>Gamepass</h3>
+    <p>Blox Fruits Boost</p>
+    <div class="price">$7.00</div>
+    <button onclick="addToCart('Gamepass Boost',7)">Add to Cart</button>
   </div>
 </section>
 
-<section id="why" class="why">
-  <h2>Why choose us?</h2>
-  <div class="reasons">
-    <div>⚡ Instant Delivery</div>
-    <div>🔒 Secure Payment</div>
-    <div>💰 Best Prices</div>
-    <div>🛠 24/7 Support</div>
-  </div>
-</section>
+<div class="cart" id="cart">
+  <h2>Your Cart</h2>
+  <div id="cart-items"></div>
+  <strong>Total: $<span id="total">0</span></strong>
+  <div id="paypal-button-container"></div>
+</div>
 
-<section id="faq" class="faq">
-  <h2>FAQ</h2>
-  <p><b>Is this safe?</b> Yes, thousands of successful deliveries.</p>
-  <p><b>How do I receive my item?</b> Instructions are sent after purchase.</p>
-</section>
+<script>
+let cart=[];
+function toggleCart(){document.getElementById('cart').classList.toggle('active')}
+function addToCart(name,price){cart.push({name,price});renderCart()}
+function renderCart(){
+  let items=document.getElementById('cart-items');
+  let total=0;items.innerHTML='';
+  cart.forEach(i=>{total+=i.price;items.innerHTML+=`<div class='cart-item'><span>${i.name}</span><span>$${i.price}</span></div>`});
+  document.getElementById('total').innerText=total.toFixed(2);
+}
 
-<footer>
-  © 2026 BloxyPirates
-</footer>
+paypal.Buttons({
+  createOrder:(data,actions)=>{
+    return actions.order.create({purchase_units:[{amount:{value:cart.reduce((a,b)=>a+b.price,0).toFixed(2)}}]});
+  },
+  onApprove:(data,actions)=>{
+    return actions.order.capture().then(()=>{
+      alert('Payment successful!');cart=[];renderCart();toggleCart();
+    });
+  }
+}).render('#paypal-button-container');
+</script>
 
 </body>
 </html>

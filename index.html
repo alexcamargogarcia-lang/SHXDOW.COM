@@ -11,89 +11,78 @@
     body{background:#0b0f1a;color:#fff}
     header{padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:#0f1424}
     header h1{color:#4da3ff}
-    .cart-btn{background:#1e90ff;border:none;color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer}
-    .hero{padding:60px 40px;text-align:center}
-    .hero h2{font-size:42px;margin-bottom:10px}
-    .hero p{opacity:.7}
+    .cart-btn{background:#1e90ff;border:none;color:#fff;padding:10px 16px;border-radius:10px;cursor:pointer}
+    .hero{text-align:center;padding:50px}
+    .hero h2{font-size:42px}
+    .filters{text-align:center;margin-top:20px}
+    .filters button{margin:5px}
     .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px;padding:40px}
-    .card{background:#121833;border-radius:16px;padding:20px;box-shadow:0 0 30px rgba(0,0,0,.4)}
-    .card img{width:100%;border-radius:12px}
-    .card h3{margin:15px 0 5px}
-    .card p{opacity:.7;font-size:14px}
-    .price{margin:10px 0;font-weight:600}
-    .card button{width:100%;padding:10px;border:none;border-radius:10px;background:#1e90ff;color:#fff;font-weight:600;cursor:pointer}
+    .card{background:#121833;border-radius:18px;padding:18px;box-shadow:0 0 40px rgba(0,0,0,.5);transition:.3s}
+    .card:hover{transform:translateY(-6px)}
+    .card img{width:100%;height:180px;object-fit:cover;border-radius:14px}
+    .card h3{margin:12px 0 4px}
+    .card p{font-size:14px;opacity:.7}
+    .price{margin:8px 0;font-weight:600}
+    .qty{display:flex;gap:10px;margin-bottom:10px}
+    .qty input{width:60px;padding:6px;border-radius:6px;border:none;text-align:center}
+    .card button{width:100%;padding:10px;border:none;border-radius:12px;background:#1e90ff;color:#fff;font-weight:600;cursor:pointer}
     .cart{position:fixed;top:0;right:-100%;width:360px;height:100%;background:#0f1424;padding:20px;transition:.4s;overflow:auto}
     .cart.active{right:0}
-    .cart h2{margin-bottom:15px}
-    .cart-item{display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px}
-    #paypal-button-container{margin-top:20px}
+    .cart h2{margin-bottom:10px}
+    .cart-item{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+    input{outline:none}
   </style>
 </head>
 <body>
-
 <header>
   <h1>Bloxy Pirates</h1>
   <button class="cart-btn" onclick="toggleCart()">🛒 Cart</button>
 </header>
 
 <section class="hero">
-  <h2>Blox Fruits Items Shop</h2>
-  <p>Fast delivery • Secure payments • Trusted seller</p>
+  <h2>Blox Fruits Shop</h2>
+  <p>Fast delivery • Trusted seller • PayPal</p>
+  <div class="filters">
+    <button class="cart-btn" onclick="filter('all')">All</button>
+    <button class="cart-btn" onclick="filter('fruit')">Fruits</button>
+    <button class="cart-btn" onclick="filter('currency')">Currency</button>
+  </div>
 </section>
 
 <section class="products">
-  <div class="card">
-    <img src="https://i.imgur.com/L8J5FQb.png">
-    <h3>Leopard Fruit</h3>
-    <p>Mythical fruit</p>
-    <div class="price">$10.00</div>
-    <button onclick="addToCart('Leopard Fruit',10)">Add to Cart</button>
-  </div>
-
-  <div class="card">
-    <img src="https://i.imgur.com/Jl4ZC0n.png">
-    <h3>Dough Fruit</h3>
-    <p>Awakened power</p>
-    <div class="price">$8.00</div>
-    <button onclick="addToCart('Dough Fruit',8)">Add to Cart</button>
-  </div>
-
-  <div class="card">
-    <img src="https://i.imgur.com/8qGQkCw.png">
+  <div class="card fruit">
+    <img src="https://images.unsplash.com/photo-1601758125946-6ec2ef64daf8">
     <h3>Dragon Fruit</h3>
-    <p>Legendary beast</p>
-    <div class="price">$12.00</div>
-    <button onclick="addToCart('Dragon Fruit',12)">Add to Cart</button>
+    <p>Legendary power</p>
+    <div class="price">$12</div>
+    <div class="qty"><input type="number" min="1" value="1" id="q1"></div>
+    <button onclick="add('Dragon Fruit',12,document.getElementById('q1').value)">Add</button>
   </div>
 
-  <div class="card">
-    <img src="https://i.imgur.com/3H7QZxK.png">
-    <h3>Beli (1B)</h3>
-    <p>In‑game currency</p>
-    <div class="price">$5.00</div>
-    <button onclick="addToCart('1 Billion Beli',5)">Add to Cart</button>
+  <div class="card fruit">
+    <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131">
+    <h3>Leopard Fruit</h3>
+    <p>Mythical speed</p>
+    <div class="price">$10</div>
+    <div class="qty"><input type="number" min="1" value="1" id="q2"></div>
+    <button onclick="add('Leopard Fruit',10,document.getElementById('q2').value)">Add</button>
   </div>
 
-  <div class="card">
-    <img src="https://i.imgur.com/2Yp1K7W.png">
-    <h3>Fragments (100K)</h3>
-    <p>Awakening currency</p>
-    <div class="price">$6.00</div>
-    <button onclick="addToCart('100K Fragments',6)">Add to Cart</button>
-  </div>
-
-  <div class="card">
-    <img src="https://i.imgur.com/8xg5H5B.png">
-    <h3>Gamepass</h3>
-    <p>Blox Fruits Boost</p>
-    <div class="price">$7.00</div>
-    <button onclick="addToCart('Gamepass Boost',7)">Add to Cart</button>
+  <div class="card currency">
+    <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3">
+    <h3>1B Beli</h3>
+    <p>In-game money</p>
+    <div class="price">$5</div>
+    <div class="qty"><input type="number" min="1" value="1" id="q3"></div>
+    <button onclick="add('1B Beli',5,document.getElementById('q3').value)">Add</button>
   </div>
 </section>
 
 <div class="cart" id="cart">
-  <h2>Your Cart</h2>
-  <div id="cart-items"></div>
+  <h2>Checkout</h2>
+  <label>Roblox Username</label>
+  <input id="roblox" placeholder="Your Roblox username" style="width:100%;padding:8px;border-radius:8px;border:none;margin:8px 0">
+  <div id="items"></div>
   <strong>Total: $<span id="total">0</span></strong>
   <div id="paypal-button-container"></div>
 </div>
@@ -101,25 +90,17 @@
 <script>
 let cart=[];
 function toggleCart(){document.getElementById('cart').classList.toggle('active')}
-function addToCart(name,price){cart.push({name,price});renderCart()}
-function renderCart(){
-  let items=document.getElementById('cart-items');
-  let total=0;items.innerHTML='';
-  cart.forEach(i=>{total+=i.price;items.innerHTML+=`<div class='cart-item'><span>${i.name}</span><span>$${i.price}</span></div>`});
-  document.getElementById('total').innerText=total.toFixed(2);
-}
+function add(name,price,qty){qty=parseInt(qty);cart.push({name,price,qty});render()}
+function render(){let t=0,el=document.getElementById('items');el.innerHTML='';cart.forEach(i=>{t+=i.price*i.qty;el.innerHTML+=`<div class='cart-item'><span>${i.name} x${i.qty}</span><span>$${i.price*i.qty}</span></div>`});document.getElementById('total').innerText=t.toFixed(2)}
+function filter(c){document.querySelectorAll('.card').forEach(e=>{e.style.display=(c==='all'||e.classList.contains(c))?'block':'none'})}
 
 paypal.Buttons({
-  createOrder:(data,actions)=>{
-    return actions.order.create({purchase_units:[{amount:{value:cart.reduce((a,b)=>a+b.price,0).toFixed(2)}}]});
+  createOrder:(d,a)=>{
+    if(!document.getElementById('roblox').value){alert('Enter Roblox username');throw new Error()}
+    return a.order.create({purchase_units:[{amount:{value:cart.reduce((s,i)=>s+i.price*i.qty,0).toFixed(2)}}]});
   },
-  onApprove:(data,actions)=>{
-    return actions.order.capture().then(()=>{
-      alert('Payment successful!');cart=[];renderCart();toggleCart();
-    });
-  }
+  onApprove:(d,a)=>a.order.capture().then(()=>{alert('Payment successful!');cart=[];render();toggleCart()})
 }).render('#paypal-button-container');
 </script>
-
 </body>
 </html>

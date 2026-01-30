@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Chat con Gemini (funcionando 2026)</title>
+  <title>Chat con Gemini 2.5 Flash (funcionando 2026)</title>
   <style>
     body { font-family: Arial, sans-serif; max-width: 800px; margin: 2rem auto; padding: 1rem; }
     #chat { border: 1px solid #ddd; padding: 1rem; height: 400px; overflow-y: auto; margin-bottom: 1rem; background: #f9f9f9; border-radius: 8px; }
@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<h1>Chat IA potente con Gemini</h1>
+<h1>Chat IA potente con Gemini 2.5 Flash</h1>
 <div id="chat"></div>
 
 <input id="input" placeholder="Escribe tu mensaje aquí..." autofocus />
@@ -25,16 +25,17 @@
 <script type="module">
   import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-  // ← Tu API key (cámbiala por una nueva si quieres más seguridad)
+  // Tu API key (crea una nueva si sigue fallando: https://aistudio.google.com/app/apikey)
   const API_KEY = "AIzaSyAZYkYJBYRN7-4JwB03PQgyVelILiT4QRY";
 
   const genAI = new GoogleGenerativeAI(API_KEY);
 
-  // Modelos que funcionan bien en enero 2026 (elige uno comentando los otros)
+  // Modelos válidos ahora (elige uno – empieza con gemini-2.5-flash)
   const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",          // ← Prueba este primero (rápido y gratis)
-    // model: "gemini-2.5-flash",       // Alternativa más nueva y potente
-    // model: "gemini-1.5-pro",         // Más inteligente pero algo más lento
+    model: "gemini-2.5-flash",                // ← Este debería funcionar YA (estable, rápido)
+    // model: "gemini-2.5-pro",               // Más inteligente (prueba si el anterior falla)
+    // model: "gemini-3-flash-preview",       // El más nuevo, pero preview → necesita billing
+    // model: "gemini-3-pro-preview",         // Top potencia, preview + billing
     generationConfig: { 
       temperature: 0.7, 
       maxOutputTokens: 1024 
@@ -63,22 +64,26 @@
     input.value = "";
 
     try {
-      addMessage("Pensando...", "bot"); // Indicador de carga
+      addMessage("Pensando...", "bot");
       const result = await chat.sendMessage(texto);
       const respuesta = await result.response.text();
 
-      // Borra el "Pensando..." y muestra la respuesta real
-      chatDiv.lastChild.remove();
+      chatDiv.lastChild.remove(); // Borra "Pensando..."
       addMessage(respuesta, "bot");
     } catch (err) {
-      chatDiv.lastChild?.remove(); // Borra "Pensando..." si falla
+      chatDiv.lastChild?.remove();
       let msgError = "Error: " + err.message;
-      if (err.message.includes("API_KEY")) msgError += " → Revisa o crea nueva API key";
-      if (err.message.includes("model")) msgError += " → Modelo no disponible, prueba 'gemini-1.5-flash'";
-      if (err.message.includes("rate limit") || err.message.includes("quota")) msgError += " → Límite diario alcanzado (crea nueva key o espera)";
-      
-      addMessage(msgError + "\n\nRevisa la consola del navegador (F12 → Console) para más detalles.", "bot error");
-      console.error("Error completo de Gemini API:", err);
+      if (err.message.includes("404") || err.message.includes("not found")) {
+        msgError += "\n\nModelo no disponible → Prueba cambiar a 'gemini-2.5-pro' o 'gemini-3-flash-preview' en el código.";
+      }
+      if (err.message.includes("API_KEY") || err.message.includes("invalid")) {
+        msgError += "\n\nAPI Key inválida → Crea una nueva en https://aistudio.google.com/app/apikey";
+      }
+      if (err.message.includes("quota") || err.message.includes("limit")) {
+        msgError += "\n\nLímite alcanzado → Espera o activa billing en Google Cloud.";
+      }
+      addMessage(msgError + "\n\nRevisa consola (F12 → Console) y dime el error exacto.", "bot error");
+      console.error("Error Gemini:", err);
     }
   }
 

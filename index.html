@@ -2,36 +2,44 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Chat IA potente con Gemini 3 Pro</title>
+  <title>Chat con Gemini (funcionando 2026)</title>
   <style>
-    body { font-family: Arial; max-width: 800px; margin: 2rem auto; }
-    #chat { border: 1px solid #ccc; padding: 1rem; height: 400px; overflow-y: auto; margin-bottom: 1rem; }
-    .user { text-align: right; color: navy; }
-    .bot  { text-align: left; color: darkgreen; }
-    input  { width: 80%; padding: 0.8rem; }
-    button { padding: 0.8rem 1.5rem; }
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 2rem auto; padding: 1rem; }
+    #chat { border: 1px solid #ddd; padding: 1rem; height: 400px; overflow-y: auto; margin-bottom: 1rem; background: #f9f9f9; border-radius: 8px; }
+    .user { text-align: right; color: #1e88e5; margin: 0.5rem 0; }
+    .bot  { text-align: left; color: #2e7d32; margin: 0.5rem 0; }
+    .error { color: red; font-weight: bold; }
+    input  { width: 70%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { padding: 0.8rem 1.5rem; background: #1e88e5; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #1565c0; }
   </style>
 </head>
 <body>
 
-<h1>Chat con Gemini 3 Pro</h1>
+<h1>Chat IA potente con Gemini</h1>
 <div id="chat"></div>
 
-<input id="input" placeholder="Pregúntame lo que sea..." autofocus />
+<input id="input" placeholder="Escribe tu mensaje aquí..." autofocus />
 <button onclick="enviar()">Enviar</button>
 
 <script type="module">
   import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-  // ¡Cambia esto por TU API KEY!
-  const API_KEY = "AIzaSyAZYkYJBYRN7-4JwB03PQgyVelILiT4QRY";  // → https://aistudio.google.com/app/apikey
+  // ← Tu API key (cámbiala por una nueva si quieres más seguridad)
+  const API_KEY = "AIzaSyAZYkYJBYRN7-4JwB03PQgyVelILiT4QRY";
 
   const genAI = new GoogleGenerativeAI(API_KEY);
+
+  // Modelos que funcionan bien en enero 2026 (elige uno comentando los otros)
   const model = genAI.getGenerativeModel({
-    model: "gemini-3-pro-preview",   // o "gemini-3-pro-latest" si ya está disponible
-    // Alternativa más barata y rápida: "gemini-3-flash-preview"
-    generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
-    systemInstruction: "Eres un asistente experto, amable y muy preciso. Responde siempre en español."
+    model: "gemini-1.5-flash",          // ← Prueba este primero (rápido y gratis)
+    // model: "gemini-2.5-flash",       // Alternativa más nueva y potente
+    // model: "gemini-1.5-pro",         // Más inteligente pero algo más lento
+    generationConfig: { 
+      temperature: 0.7, 
+      maxOutputTokens: 1024 
+    },
+    systemInstruction: "Eres un asistente útil, preciso y amigable. Responde SIEMPRE en español."
   });
 
   const chat = model.startChat({ history: [] });
@@ -55,16 +63,28 @@
     input.value = "";
 
     try {
+      addMessage("Pensando...", "bot"); // Indicador de carga
       const result = await chat.sendMessage(texto);
       const respuesta = await result.response.text();
+
+      // Borra el "Pensando..." y muestra la respuesta real
+      chatDiv.lastChild.remove();
       addMessage(respuesta, "bot");
     } catch (err) {
-      addMessage("Error: " + err.message, "bot");
-      console.error(err);
+      chatDiv.lastChild?.remove(); // Borra "Pensando..." si falla
+      let msgError = "Error: " + err.message;
+      if (err.message.includes("API_KEY")) msgError += " → Revisa o crea nueva API key";
+      if (err.message.includes("model")) msgError += " → Modelo no disponible, prueba 'gemini-1.5-flash'";
+      if (err.message.includes("rate limit") || err.message.includes("quota")) msgError += " → Límite diario alcanzado (crea nueva key o espera)";
+      
+      addMessage(msgError + "\n\nRevisa la consola del navegador (F12 → Console) para más detalles.", "bot error");
+      console.error("Error completo de Gemini API:", err);
     }
   }
 
-  input.addEventListener("keypress", e => { if (e.key === "Enter") enviar(); });
+  input.addEventListener("keypress", e => {
+    if (e.key === "Enter") enviar();
+  });
 </script>
 </body>
 </html>

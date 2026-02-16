@@ -194,12 +194,15 @@
       }
     });
     
-<audio id="music" loop>
-    <source src="sabanas-blancas.mp3" type="audio/mpeg">
+<audio id="music" loop muted autoplay>
+  <source src="sabanas-blancas.mp3" type="audio/mpeg">
+  Tu navegador no soporta audio.
 </audio>
 
     function cerrar() {
-      blocker.classList.add('hidden');
+      blocker.classList.add('hidden');const audio = document.getElementById('music');
+audio.muted = false;  // quita el mute → ahora sí suena
+audio.play();         // fuerza reproducción (ya permitido por la interacción)
       setTimeout(() => {
         blocker.style.display = 'none';
         carta.style.display = 'block';
@@ -210,4 +213,5 @@
 
 </body>
 </html>
+
 

@@ -199,20 +199,24 @@
   Tu navegador no soporta audio.
 </audio>
 
-    function cerrar() {
-      blocker.classList.add('hidden');const audio = document.getElementById('music');
-audio.muted = false;  // quita el mute → ahora sí suena
-audio.play();         // fuerza reproducción (ya permitido por la interacción)
-      setTimeout(() => {
-        blocker.style.display = 'none';
-        carta.style.display = 'block';
-        document.title = "Carta de amor leída 💌✨";
-      }, 900);
-    }
+function cerrar() {
+  blocker.classList.add('hidden');
+  
+  const audio = document.getElementById('music');
+  audio.muted = false;
+  audio.play().catch(err => console.log("Error al reproducir:", err));
+
+  setTimeout(() => {
+    blocker.style.display = 'none';
+    carta.style.display = 'block';
+    document.title = "Carta de amor leída 💌✨";
+  }, 900);
+}
   </script>
 
 </body>
 </html>
+
 
 
 
